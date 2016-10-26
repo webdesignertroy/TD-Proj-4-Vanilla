@@ -204,8 +204,9 @@ var createLightBox = function(info) {
 	rightArrow.style.display = "block";
 	leftArrow.style.display = "block";
 
-	// Display overlay
-	overlay.classList.add("show-overlay");
+	// Display overlay with Fade-in
+	fadeThisIn(overlay)
+
 }; // ~end create Lightbox
 
 /*  FUNCTION: Hide Lightbox  */
@@ -216,8 +217,8 @@ var hideLightBox = function(){
 		overlay.removeChild(overlay.lastChild);
 	}	
 
-	// Hide overlay
-	overlay.classList.remove("show-overlay");
+	// Hide overlay with Animation
+	fadeThisOut(overlay);
 
 	// Hide arrows
 	rightArrow.style.display = "none";
@@ -358,7 +359,7 @@ var filterGallery = function(e) {
 			// Fade in filtered-in thumbs
 			function fadeIn(el, display) {
 				el.style.opacity = 0;
-				el.style.display = display || "inline-block";
+				el.style.display = "inline-block";
 
 				// Add one to liveCount
 				liveCount++;
@@ -543,6 +544,34 @@ function buildThumbGallery() {
 	galleryContainer.innerHTML = HTML;
     
 } // ~end buildThumbGallery
+
+// FUNCTION: Fade-in a div
+function fadeThisIn(el) {
+	el.style.opacity = 0;
+	el.style.display = "block";
+
+	(function fade() {
+		var val = parseFloat(el.style.opacity);
+		if( !((val += 0.07) > 1) ) {
+			el.style.opacity = val;
+			requestAnimationFrame(fade);
+		}
+	})();
+
+};// ~end Fade-in a div
+
+// FUNCTION: Fade-out a div
+function fadeThisOut(el) {
+	el.style.opacity = 1;
+
+	(function fade() {
+		if ((el.style.opacity -= 0.07) < 0) {
+			el.style.display = 'none';
+		} else {
+			window.requestAnimationFrame(fade);
+		}
+	})();
+}// ~end Fade-out a div
 
 /*************************************
 	EVENT LISTENERS
