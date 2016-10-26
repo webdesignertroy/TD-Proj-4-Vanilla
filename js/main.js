@@ -330,7 +330,7 @@ var filterGallery = function(e) {
 				el.style.opacity = 1;
 
 				(function fade() {
-					if ((el.style.opacity -= 0.1) < 0) {
+					if ((el.style.opacity -= 0.15) < 0) {
 						el.style.display = 'none';
 					} else {
 						window.requestAnimationFrame(fade);
