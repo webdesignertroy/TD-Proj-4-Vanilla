@@ -123,7 +123,6 @@ buildThumbGallery();
 **************************************/
 var imageLink = document.getElementsByClassName("image-link");
 var overlay = document.getElementById("overlay");
-var wrapper = document.getElementById("wrapper");
 var searchBox = document.getElementById("searchbox");
 var reset = document.getElementById("reset");
 var rightArrow = document.getElementById("arrow-right");
@@ -228,23 +227,33 @@ var hideLightBox = function(){
 
 // FUNCTION: On thumb hover show title and caption
 var onThumbHover = function(e){
+
+	// prevent browser default
 	e.preventDefault();
+
+	// show title and caption
 	this.getElementsByClassName("caption-info")[0].classList.add("show-info");
+
 };// ~end on thumb hover, show title and caption
 
-// FUNCTION: On thumb hover remove title and caption
+// FUNCTION: On thumb hover, remove title and caption
 var onThumbUnHover = function(e){
+
+	// prevent browser default
 	e.preventDefault();
+
+	// hide title and caption
 	this.getElementsByClassName("caption-info")[0].classList.remove("show-info");
+
 };// ~end on thumb hover, remove and title caption
 
-// FUNCTION: On thumb click prepare to open light box
+// FUNCTION: On thumb click, prepare to open light box
 var onThumbClick = function(e) {
 
 	// prevent browser default
 	e.preventDefault();
 
-	// invoke data with info
+	// get some necessary information from thumb's attributes
 	var data = this.getAttribute("data-index");
 	var initHref = this.getAttribute("href");
 
@@ -253,7 +262,7 @@ var onThumbClick = function(e) {
 
 
 	// Find clicked thumb in new dynamicGallery
-	//    and set new current Image
+	//    and set new currentImage value
 	for ( var position in dynamicGallery ) {
 		if ( initHref.indexOf(dynamicGallery[position].image) !== -1 ) {
 			currentImage = parseInt(position);
@@ -274,13 +283,13 @@ var filterGallery = function(e) {
 	var searchBoxValueMessage = searchBox.value;
 	var searchBoxValue = searchBox.value.toUpperCase();
 
-	// other variables
+	// other necessary variables
 	var filteredGalleryIndex = [];
 	var galleryDOM = document.getElementById("gallery").children;
 	var response = document.getElementById("response");
 	dynamicGallery = [];
 
-	// Filter:
+	//--- Build searchable array for indexOf: ---
 	// Create "for...in" loop for gallery object 
 	for ( var info in gallery ) {
 
@@ -295,19 +304,21 @@ var filterGallery = function(e) {
 		} 
 	}
 
-	// Hide what I don't need
+	//--- Filter: Hide and show .col divs: ---
 
-	// Transformed array into a searchable string
+	// Transformed searchable array into one searchable string
 	filteredGalleryIndex = filteredGalleryIndex.join(" ");
 
-	// Loop through gallery childeren, hiding what 
-	//     I don't need and showing what I do
+	// Loop through gallery children and hide 
+	//     or show .col divs
 
-	// Count my active divs
+	// Variables to help me tally my active divs
 	var liveCount = 0;
 	var totalLiveCount = 0;
 	var liveMarker = 0;
 
+	// For...loop to fade out .col divs. Also, to add and remove 
+	//    classes that modify margin space
 	for (var i = 0; i < galleryDOM.length; i++ ) {
 
 		if ( filteredGalleryIndex.indexOf(i) === -1 ) { 
@@ -327,6 +338,7 @@ var filterGallery = function(e) {
 				})();
 			}
 
+			// call fadeOut function
 			if (typeof galleryDOM[i] !== "undefined") {
 				fadeOut(galleryDOM[i]);
 			}
@@ -369,14 +381,15 @@ var filterGallery = function(e) {
 				})();
 			}
 
-			// Call fade-in
+			// Call fade-in function
 			if ( typeof galleryDOM[i] !== "undefined" ) {
 				fadeIn(galleryDOM[i]);
 			}
 		}
 	}
 			
-	// For the last live div, margin should be zero
+	// For the last live div, margin should be zero, if 
+	//   if no live div is available print a message
 	if ( typeof galleryDOM[liveMarker-1] !== "undefined") {
 		galleryDOM[liveMarker-1].classList.add("zero-right");
 		// Delete "No Results Message"
@@ -394,7 +407,7 @@ var filterGallery = function(e) {
 // FUNCTION: Advance Image or Video
 var AdvImage = function(direction) {
 
-	// new current Image
+	// Define new currentImage value
 	if ( direction < 0) {
 		currentImage = dynamicGallery.length - 1;
 	} else if (direction > dynamicGallery.length - 1) {
@@ -403,15 +416,16 @@ var AdvImage = function(direction) {
 		currentImage = direction;
 	}
 	
-	// Select New Image or Video
+	// Select new img/iFrame and title and decription
 	var realImg = document.getElementById("real-img");
 	var realIFrame = document.getElementById("real-iframe");
 	var realText = document.getElementById("real-text");
 
-	// Show Text
+	// Show title and description
 	realText.innerHTML = "<strong>" + dynamicGallery[currentImage].title + "</strong>";
 	realText.innerHTML += ": " + dynamicGallery[currentImage].description;
 
+	// Determine whether to display visual content as image or video
 	if (  dynamicGallery[currentImage].type === "image" ) {
 		// Show Image
 		realImg.setAttribute("src", 'images/photos/' + dynamicGallery[currentImage].image + '.jpg');
@@ -434,7 +448,7 @@ var AdvImage = function(direction) {
 	}
 };
 
-// FUNCTION: Fwd Advance Image on Right-Arrow Click
+// FUNCTION: Forward-Advance Image on Right-Arrow Click
 var nextImg = function() {
 	// Next Image
 	var nextImage = currentImage + 1;
@@ -443,7 +457,7 @@ var nextImg = function() {
 	AdvImage(nextImage);
 };// ~end Right-Arrow Click
 
-// FUNCTION: Back Advance Image on Left-Arrow Click
+// FUNCTION: Backwards-Advance Image on Left-Arrow Click
 var prevImg = function() {
 	// Prev Image
 	var prevImage = currentImage - 1;
@@ -465,10 +479,11 @@ var resetSearch = function(e) {
 	filterGallery();
 
 }; // ~end Reset Search Box
+
 /*************************************
 	FUNCTION DECLARATIONS
 **************************************/
-/*  FUNCTION: Build Dynamic Gallery  */
+/*  FUNCTION: Build Dynamic Gallery Object  */
 function buildDynamicGallery(index) {
 	dynamicGallery.push({
 		image: gallery[index].image,
@@ -480,20 +495,13 @@ function buildDynamicGallery(index) {
 }// ~end Build Dynamic Gallery
 
 // FUNCTION: Build Thumb Gallery
-function buildThumbGallery(thumbIndex) { 
+function buildThumbGallery() { 
 	dynamicGallery = [];
 
-	// Add margin-zero class to 4th div
+	// Variable used to count every 4th .col div
 	var fourthDiv = 0;
 
-	/*   Load data to DOM  */
-	if ( typeof thumbIndex === "undefined" ) {
-		thumbIndex = "";
-	} else {
-		thumbIndex = thumbIndex.join(" | ");
-	}
-
-	// Create var for DOM HTML
+	// Create empty variable for DOM HTML
 	var HTML = "";
 
 	// target #gallery
@@ -581,28 +589,4 @@ document.addEventListener('keydown', function(e) {
 	}
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
