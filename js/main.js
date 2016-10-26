@@ -131,62 +131,66 @@ var leftArrow = document.getElementById("arrow-left");
 var currentImage;
 var dynamicGallery;
 
+
 /*************************************
 	VARIABLES: FUNCTION EXPRESSIONS
 **************************************/
 
-/*  Create Lightbox  */
+/*  FUNCTION: Create Lightbox  */
 var createLightBox = function(info) {
 
-	// Append Overlay with image data
+	//--- Append Overlay with visual data: ---
 
-	//    Create img and paragraph
+	//    Create img and paragraph elements and 
+	//       set Attributes
 	var realImg = document.createElement("img");
 	var realIFrame = document.createElement("iframe");
 	var realText = document.createElement("p");
 
 	if ( gallery[info].type === "image" ) {
 
-		//    Create image src attribute & add value
+		//    Create image src attribute & add dynamic value
 		var imgAttr = document.createAttribute("src");
 		imgAttr.value = 'images/photos/' + gallery[info].image + '.jpg';
 
-		//    Create iframe src attribute & add blank
+		//    Create iFrame src attribute & add empty value
 		var iframeAttr = document.createAttribute("src");
 		iframeAttr.value = '';
 
 	} else {
 		
-		//    Create src attribute & add value
+		//    Create src attribute & add empty value
 		var imgAttr = document.createAttribute("src");
 		imgAttr.value = '';
 
-		//    Create iframe src attribute & add blank
+		//    Create iframe src attribute & add dynamic value
 		var iframeAttr = document.createAttribute("src");
 		iframeAttr.value = gallery[info].vsrc;
 
 	}
-	//    Set src attribute into realImg and realIFrame
+	//    Set src attribute into img and iFrame variables
 	realImg.setAttributeNode(imgAttr);
 	realIFrame.setAttributeNode(iframeAttr);
 
-	//    Add caption to Paragraph
+	//    Add dynamic title and description values to 
+	//       paragraph's innerHTML
 	var caption = "<strong>" + gallery[info].title + "</strong>";
 	caption+= ": " + gallery[info].description;
 
 	realText.innerHTML = caption;
 
-	//    Add id to realImg and realIFrame
+	//    Give img, iFrame and paragraph ids
 	realImg.id = "real-img";
 	realIFrame.id = "real-iframe";
 	realText.id = "real-text";
 
-	// Append realImg to Overlay as child
+	// Append img, iFrame and paragraph to 
+	//   the overlay as child
 	overlay.appendChild(realImg);
 	overlay.appendChild(realIFrame);
 	overlay.appendChild(realText);
 
-	// Display image or video
+	// Display visual content as an image or a video
 	if ( gallery[info].type === "image" ) {
 		realImg.style.display = "block";
 		realIFrame.style.display = "none";
@@ -194,6 +198,8 @@ var createLightBox = function(info) {
 		realImg.style.display = "none";
 		realIFrame.style.display = "block";
 	}
+
+	//--- Prepare navigation and show overlay: ---
 
 	// Display arrows
 	rightArrow.style.display = "block";
@@ -203,7 +209,7 @@ var createLightBox = function(info) {
 	overlay.classList.add("show-overlay");
 }; // ~end create Lightbox
 
-/*  Hide Lightbox  */
+/*  FUNCTION: Hide Lightbox  */
 var hideLightBox = function(){
 
 	//Remove all nodes from overlay
@@ -220,19 +226,19 @@ var hideLightBox = function(){
 
 };// ~end Hide Lightbox
 
-// On thumb hover show title and caption
+// FUNCTION: On thumb hover show title and caption
 var onThumbHover = function(e){
 	e.preventDefault();
 	this.getElementsByClassName("caption-info")[0].classList.add("show-info");
 };// ~end on thumb hover, show title and caption
 
-// On thumb hover remove title and caption
+// FUNCTION: On thumb hover remove title and caption
 var onThumbUnHover = function(e){
 	e.preventDefault();
 	this.getElementsByClassName("caption-info")[0].classList.remove("show-info");
 };// ~end on thumb hover, remove and title caption
 
-// On thumb click prepare to open light box
+// FUNCTION: On thumb click prepare to open light box
 var onThumbClick = function(e) {
 
 	// prevent browser default
@@ -256,7 +262,7 @@ var onThumbClick = function(e) {
 
 }; // ~end Open lightbox on thumb click
 
-/*  Filter Gallery  */
+/*  FUNCTION: Filter Gallery  */
 var filterGallery = function(e) {
 
 	// prevent natural browser behavior
@@ -385,7 +391,7 @@ var filterGallery = function(e) {
 
 };// ~end Filter Gallery
 
-// Advance Image or Video
+// FUNCTION: Advance Image or Video
 var AdvImage = function(direction) {
 
 	// new current Image
@@ -428,25 +434,25 @@ var AdvImage = function(direction) {
 	}
 };
 
-// Fwd Advance Image on Arrow Click
+// FUNCTION: Fwd Advance Image on Right-Arrow Click
 var nextImg = function() {
 	// Next Image
 	var nextImage = currentImage + 1;
 
 	// Call AdvImg
 	AdvImage(nextImage);
-};
+};// ~end Right-Arrow Click
 
-// Back Advance Image on Arrow Click
+// FUNCTION: Back Advance Image on Left-Arrow Click
 var prevImg = function() {
 	// Prev Image
 	var prevImage = currentImage - 1;
 
 	// Call AdvImg
 	AdvImage(prevImage);
-};
+};// ~end Left-Arrow Click
 
-// Reset Search Box 
+// FUNCTION: Reset Search Box 
 var resetSearch = function(e) {
 
 	// Prevent browser's natural behavior
@@ -462,7 +468,7 @@ var resetSearch = function(e) {
 /*************************************
 	FUNCTION DECLARATIONS
 **************************************/
-/*  Build Dynamic Gallery  */
+/*  FUNCTION: Build Dynamic Gallery  */
 function buildDynamicGallery(index) {
 	dynamicGallery.push({
 		image: gallery[index].image,
@@ -471,8 +477,9 @@ function buildDynamicGallery(index) {
 		type: gallery[index].type,
 		vsrc: gallery[index].vsrc
 	});
-}
-// Build Thumb Gallery
+}// ~end Build Dynamic Gallery
+
+// FUNCTION: Build Thumb Gallery
 function buildThumbGallery(thumbIndex) { 
 	dynamicGallery = [];
 
@@ -557,25 +564,25 @@ reset.onclick = resetSearch;
 **************************************/
 document.addEventListener('keydown', function(e) {
 
-	switch(e.keyCode) {
-	case 13:
-	case 27:
-		hideLightBox();
-	break;
-	case 37:
-		//Advances slideshow left on left-arrow [37] key.
-		if( overlay.children.length !== 0  ) {
-			prevImg();
+	if ( overlay.children.length !== 0  ) {
+		switch(e.keyCode) {
+			case 27:
+				hideLightBox();
+			break;
+			case 37:
+				//Advances slideshow left on left-arrow [37] key.
+				prevImg();
+			break;
+			case 39:
+				//Advances slideshow left on right-arrow [39] key.
+				nextImg();
+			break;
 		}
-	break;
-	case 39:
-		//Advances slideshow left on right-arrow [39] key.
-		if( overlay.children.length !== 0  ) {
-			nextImg();
-		}
-	break;
-}
+	}
+
 });
+
+
 
 
 

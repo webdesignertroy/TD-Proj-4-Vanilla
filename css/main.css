@@ -352,6 +352,13 @@ input:-ms-input-placeholder {
 }
 
 /* ================================= 
+  Accessibility
+==================================== */
+.col a:focus .caption-info {
+	opacity: 1;
+}
+
+/* ================================= 
   Media Queries
 ==================================== */
 @media (min-width: 768px) {
