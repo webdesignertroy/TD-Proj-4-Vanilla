@@ -213,7 +213,7 @@ var hideLightBox = function(){
 
 	//Remove all nodes from overlay
 	while (overlay.hasChildNodes()) {
-    	overlay.removeChild(overlay.lastChild);
+		overlay.removeChild(overlay.lastChild);
 	}	
 
 	// Hide overlay
@@ -252,6 +252,12 @@ var onThumbClick = function(e) {
 
 	// prevent browser default
 	e.preventDefault();
+
+	// reset overlay if it has children
+		//Remove all nodes from overlay
+	while (overlay.hasChildNodes()) {
+		overlay.removeChild(overlay.lastChild);
+	}	
 
 	// get some necessary information from thumb's attributes
 	var data = this.getAttribute("data-index");
