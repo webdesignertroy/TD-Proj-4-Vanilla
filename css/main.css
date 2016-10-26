@@ -170,6 +170,7 @@ image-link, video-link {
 	display: inline-block;
 	position: relative;
 	margin: 30px;
+	transition: .5s all;
 }
 .image-link:focus, video-link:focus {
 	outline: none;
