@@ -553,8 +553,32 @@ searchBox.onkeyup = filterGallery;
 reset.onclick = resetSearch;
 
 /*************************************
-	ACCESSIBILITY
+	PARTIAL ACCESSIBILITY
 **************************************/
+document.addEventListener('keydown', function(e) {
+
+	switch(e.keyCode) {
+	case 13:
+	case 27:
+		hideLightBox();
+	break;
+	case 37:
+		//Advances slideshow left on left-arrow [37] key.
+		if( overlay.children.length !== 0  ) {
+			prevImg();
+		}
+	break;
+	case 39:
+		//Advances slideshow left on right-arrow [39] key.
+		if( overlay.children.length !== 0  ) {
+			nextImg();
+		}
+	break;
+}
+});
+
+
+
 
 
 
