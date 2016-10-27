@@ -130,7 +130,6 @@ var leftArrow = document.getElementById("arrow-left");
 var currentImage;
 var dynamicGallery;
 
-
 /*************************************
 	VARIABLES: FUNCTION EXPRESSIONS
 **************************************/
@@ -145,6 +144,7 @@ var createLightBox = function(info) {
 	var realImg = document.createElement("img");
 	var realIFrame = document.createElement("iframe");
 	var realText = document.createElement("p");
+	var visualWrapper = document.createElement("div");
 
 	if ( gallery[info].type === "image" ) {
 
@@ -178,16 +178,20 @@ var createLightBox = function(info) {
 
 	realText.innerHTML = caption;
 
-	//    Give img, iFrame and paragraph ids
+	//    Give wrapper, img, iFrame and paragraph ids
+	visualWrapper.id = "visual-wrapper";
 	realImg.id = "real-img";
 	realIFrame.id = "real-iframe";
 	realText.id = "real-text";
 
 	// Append img, iFrame and paragraph to 
-	//   the overlay as child
-	overlay.appendChild(realImg);
-	overlay.appendChild(realIFrame);
-	overlay.appendChild(realText);
+	//   the wrapper as child
+	visualWrapper.appendChild(realImg);
+	visualWrapper.appendChild(realIFrame);
+	visualWrapper.appendChild(realText);
+
+	// Append wrapper to the overlay as child
+	overlay.appendChild(visualWrapper);
 
 	// Display visual content as an image or a video
 	if ( gallery[info].type === "image" ) {
@@ -280,11 +284,6 @@ var onThumbClick = function(e) {
 
 /*  FUNCTION: Filter Gallery  */
 var filterGallery = function(e) {
-
-	// prevent natural browser behavior
-	if ( typeof e !== "undefined") {
-		e.preventDefault();
-	}
 
 	// assign search box value to variable
 	var searchBoxValueMessage = searchBox.value;
@@ -427,32 +426,52 @@ var AdvImage = function(direction) {
 	var realImg = document.getElementById("real-img");
 	var realIFrame = document.getElementById("real-iframe");
 	var realText = document.getElementById("real-text");
+	var visualWrapper = document.getElementById("visual-wrapper");
+	var text = "";
 
-	// Show title and description
-	realText.innerHTML = "<strong>" + dynamicGallery[currentImage].title + "</strong>";
-	realText.innerHTML += ": " + dynamicGallery[currentImage].description;
+	// fade-out #visual-wrapper
+	fadeThisOut(visualWrapper);
 
-	// Determine whether to display visual content as image or video
-	if (  dynamicGallery[currentImage].type === "image" ) {
-		// Show Image
-		realImg.setAttribute("src", 'images/photos/' + dynamicGallery[currentImage].image + '.jpg');
-		realImg.style.display = "block";
+	// Wait for complete fade out before changing data
+	//   Note: Use setTimeout instead of setInterval b/c 
+	//         setInterval creates unique methods
+	var timer = setTimeout(function() {
+	
+		// Add new title description to text variable
+		text += "<strong>" + dynamicGallery[currentImage].title + "</strong>";
+		text += ": " + dynamicGallery[currentImage].description;
 
-		// Hide iFrame
-		realIFrame.setAttribute("src", dynamicGallery[currentImage].vsrc);
-		realIFrame.style.display = "none";
-		// 
+		realText.innerHTML = text;
 
-	} else {
-		// Show Iframe
-		realIFrame.setAttribute("src", dynamicGallery[currentImage].vsrc);
-		realIFrame.style.display = "block";
-		//
+		// Determine whether to display visual content as image or video
+		if (  dynamicGallery[currentImage].type === "image" ) {
+			// Show Image
+			realImg.setAttribute("src", 'images/photos/' + dynamicGallery[currentImage].image + '.jpg');
+			realImg.style.display = "block";
 
-		// Hide Image
-		realImg.setAttribute("src", '');
-		realImg.style.display = "none";
-	}
+			// Hide iFrame
+			realIFrame.setAttribute("src", dynamicGallery[currentImage].vsrc);
+			realIFrame.style.display = "none";
+			// 
+
+		} else {
+			// Show Iframe
+			realIFrame.setAttribute("src", dynamicGallery[currentImage].vsrc);
+			realIFrame.style.display = "block";
+			//
+
+			// Hide Image
+			realImg.setAttribute("src", '');
+			realImg.style.display = "none";
+		}
+	}, 300);
+
+	// fade-in #visual-wrapper
+	timer = setTimeout ( function(){
+		fadeThisIn(visualWrapper);
+		clearTimeout(timer);
+	}, 300 );
+
 };
 
 // FUNCTION: Forward-Advance Image on Right-Arrow Click
