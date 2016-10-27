@@ -303,6 +303,13 @@ input[type=text] {
 input[placeholder] {
 	color: rgba(221,86,0,1);
 }
+[placeholder]:focus::-webkit-input-placeholder {
+ transition: text-indent 1.50s 0.25s ease-out;
+ text-indent: -100%;
+ -webkit-opacity: 1;
+ -moz-opacity: 1;
+ opacity: 1;
+}
 input[type=text]:focus {
 	border: 3px solid #BA4900;
 	background: rgba(34,34,34,0.03);
