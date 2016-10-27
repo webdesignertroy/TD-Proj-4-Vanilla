@@ -428,6 +428,14 @@ var AdvImage = function(direction) {
 	var realText = document.getElementById("real-text");
 	var visualWrapper = document.getElementById("visual-wrapper");
 	var text = "";
+	var fadeTime;
+
+	// if media type is a video, take a little more time to fade in.
+	if (  dynamicGallery[currentImage].type === "image" ) {
+		fadeTime = 300; 
+	} else {
+		fadeTime = 1000;
+	}
 
 	// fade-out #visual-wrapper
 	fadeThisOut(visualWrapper);
@@ -470,7 +478,7 @@ var AdvImage = function(direction) {
 	timer = setTimeout ( function(){
 		fadeThisIn(visualWrapper);
 		clearTimeout(timer);
-	}, 300 );
+	}, fadeTime );
 
 };
 
