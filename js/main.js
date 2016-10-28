@@ -116,7 +116,11 @@ var gallery = [
 /*************************************
 	INITIATE
 **************************************/
+// Buid initial Thumb Gallery
 buildThumbGallery();
+
+//Call "always current" year.
+$currentYear();
 
 /*************************************
 	VARIABLES
@@ -600,6 +604,12 @@ function fadeThisOut(el) {
 	})();
 }// ~end Fade-out a div
 
+//Function generates a current year and adds language for copyright notice.
+function $currentYear() {
+	var d = new Date();
+	var n = d.getFullYear();
+	document.getElementById("copyright").innerHTML = '&copy; ' + n + ' - The Gallery (Vanilla JavaScript Version)';
+}// ~end copyright
 /*************************************
 	EVENT LISTENERS
 **************************************/
