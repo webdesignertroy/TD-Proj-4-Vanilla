@@ -430,7 +430,9 @@ var filterGallery = function(e) {
 						
 	// For the last live div, margin should be zero, if 
 	//   if no live div is available print a message
-	if ( dynamicGallery.length -1 > 0 ) {
+	if ( dynamicGallery.length > 0 ) {
+		// add "zero-right" to last div
+
 		// Delete "No Results Message"
 		response.style.display = "none";
 		response.innerHTML = "";
@@ -613,7 +615,7 @@ function fadeThisIn(el) {
 	(function fade() {
 		var val = parseFloat(el.style.opacity);
 		if( !((val += 0.07) > 1) ) {
-			el.style.opacity = val;
+			el.style.opacity = 1;
 			requestAnimationFrame(fade);
 		}
 	})();
