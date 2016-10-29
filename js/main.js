@@ -8,7 +8,8 @@ var gallery = [
 	{
 		image: "01",
 		title: "Hay Bales",
-		description: "I love hay bales. Took this snap on a drive through the countryside past some straw &nbsp;ields.",
+		description: "I love hay bales. Took this snap on a drive through the countryside past some straw &nbsp;fields.",
+		keywords: "I love hay bales snap drive countryside straw fields",
 		type: "image",
 		vsrc: ""
 	},
@@ -16,6 +17,7 @@ var gallery = [
 		image: "02",
 		title: "Lake",
 		description: "The lake was so calm today. We had a great view of the snow on the mountains from&nbsp;here.",
+		keywords: "lake calm today great view snow mountains here",
 		type: "image",
 		vsrc: ""
 	},
@@ -23,6 +25,7 @@ var gallery = [
 		image: "03",
 		title: "Canyon",
 		description: "I hiked to the top of the mountain and got this picture of the canyon and trees&nbsp;below.",
+		keywords: "I hiked top mountain picture canyon trees below",
 		type: "image",
 		vsrc: ""
 	},
@@ -30,6 +33,7 @@ var gallery = [
 		image: "04",
 		title: "Iceberg",
 		description: "It was amazing to see an iceberg up close, it was so cold but didn’t snow&nbsp;today.",
+		keywords: "amazing iceberg up close, cold snow today",
 		type: "image",
 		vsrc: ""
 	},
@@ -37,6 +41,7 @@ var gallery = [
 		image: "05",
 		title: "Desert",
 		description: "The red cliffs were beautiful. It was really hot in the desert but we did a lot of walking through the&nbsp;canyons.",
+		keywords: "red cliffs beautiful really hot desert walking through canyons",
 		type: "image",
 		vsrc: ""
 	},
@@ -44,13 +49,15 @@ var gallery = [
 		image: "06",
 		title: "Fall",
 		description: "Fall is coming, I love when the leaves on the trees start to change&nbsp;color.",
-		type: "image",
+		keywords: "Fall coming love leaves trees start change color",
+		type: "image", 
 		vsrc: ""
 	},
 	{
 		image: "07",
 		title: "Plantation",
 		description: "I drove past this plantation yesterday, everything is so&nbsp;green!",
+		keywords: "drove past plantation yesterday everything green",
 		type: "image",
 		vsrc: ""
 	},
@@ -58,6 +65,7 @@ var gallery = [
 		image: "08",
 		title: "Dunes",
 		description: "My summer vacation to the Oregon Coast. I love the sandy&nbsp;dunes!",
+		keywords: "summer vacation Oregon Coast love the sandy dunes",
 		type: "image",
 		vsrc: ""
 	},
@@ -65,6 +73,7 @@ var gallery = [
 		image: "09",
 		title: "Countryside Lane",
 		description: "We enjoyed a quiet stroll down this countryside&nbsp;lane.",
+		keywords: "enjoyed quiet stroll down countryside lane",
 		type: "image",
 		vsrc: ""
 	},
@@ -72,6 +81,7 @@ var gallery = [
 		image: "10",
 		title: "Sunset",
 		description: "Sunset at the coast! The sky turned a lovely shade of&nbsp;orange.",
+		keywords: "Sunset coast sky turned lovely shade orange",
 		type: "image",
 		vsrc: ""
 	},
@@ -79,6 +89,7 @@ var gallery = [
 		image: "11",
 		title: "Cave",
 		description: "I did a tour of a cave today and the view of the landscape below was&nbsp;breathtaking.",
+		keywords: "tour cave today view landscape below breathtaking.",
 		type: "image",
 		vsrc: ""
 	},
@@ -86,6 +97,7 @@ var gallery = [
 		image: "12",
 		title: "Bluebells",
 		description: "I walked through this meadow of bluebells and got a good view of the snow on the mountain before the fog came&nbsp;in.",
+		keywords: "walked through meadow bluebells good view snow mountain before fog",
 		type: "image",
 		vsrc: ""
 	},
@@ -93,6 +105,7 @@ var gallery = [
 		image: "13",
 		title: "Travel Love",
 		description: "This is Travel Footage from eight countries.",
+		keywords: "Travel Footage eight countries.",
 		type: "video",
 		vsrc: "https://player.vimeo.com/video/71319358"
 	},
@@ -100,6 +113,7 @@ var gallery = [
 		image: "14",
 		title: "Hyper Travel",
 		description: "This film is a HDR hyperlapse postcard that will take you to a journey through Georgia.",
+		keywords: "film HDR hyperlapse postcard journey through Georgia.",
 		type: "video",
 		vsrc: "https://player.vimeo.com/video/72131557"
 	},
@@ -107,6 +121,7 @@ var gallery = [
 		image: "15",
 		title: "Travel",
 		description: "A mix of memories from past years adventures for my travelblog on ✈ flysleepy.com.",
+		keywords: "mix memories past years adventures travelblog flysleepy.com.",
 		type: "video",
 		vsrc: "https://player.vimeo.com/video/52742614"
 	}
@@ -288,6 +303,13 @@ var onThumbClick = function(e) {
 
 /*  FUNCTION: Filter Gallery  */
 var filterGallery = function(e) {
+	var loadMessage;
+	if ( searchBox.value.trim() === "") { 
+		loadMessage = "Reload..";
+	 } else {
+	 	loadMessage = "Searching..."
+	 }
+
 
 	// assign search box value to variable
 	var searchBoxValueMessage = searchBox.value;
@@ -297,14 +319,19 @@ var filterGallery = function(e) {
 	var filteredGalleryIndex = [];
 	var galleryDOM = document.getElementById("gallery").children;
 	var response = document.getElementById("response");
+	var loading = document.getElementById("loading");
+	var timerf;
 	dynamicGallery = [];
+
+	// Loading...
+	loading.innerHTML = loadMessage;
 
 	//--- Build searchable array for indexOf: ---
 	// Create "for...in" loop for gallery object 
 	for ( var info in gallery ) {
 
 		// assign title and description to variable
-		var galleryTitleandCaption = gallery[info].title + " " + gallery[info].description;
+		var galleryTitleandCaption =  gallery[info].title + " " + gallery[info].keywords+ " " + gallery[info].type;
 		galleryTitleandCaption = galleryTitleandCaption.toUpperCase();
 
 		// filter
@@ -316,92 +343,94 @@ var filterGallery = function(e) {
 
 	//--- Filter: Hide and show .col divs: ---
 
-	// Transformed searchable array into one searchable string
-	filteredGalleryIndex = filteredGalleryIndex.join(" ");
-
 	// Loop through gallery children and hide 
 	//     or show .col divs
 
 	// Variables to help me tally my active divs
 	var liveCount = 0;
-	var totalLiveCount = 0;
-	var liveMarker = 0;
 
-	// For...loop to fade out .col divs. Also, to add and remove 
-	//    classes that modify margin space
-	for (var i = 0; i < galleryDOM.length; i++ ) {
-
-		if ( filteredGalleryIndex.indexOf(i) === -1 ) { 
-			totalLiveCount++;
-
+	// Fade out all
+		for (var i = 0; i < galleryDOM.length; i++ ) {
+		
 			// Fade out filtered-out thumbs
-			function fadeOut(el){
-
-				el.style.opacity = 1;
-
-				(function fade() {
-					if ((el.style.opacity -= 0.15) < 0) {
-						el.style.display = 'none';
-					} else {
-						window.requestAnimationFrame(fade);
-					}
-				})();
-			}
-
-			// call fadeOut function
-			if (typeof galleryDOM[i] !== "undefined") {
-				fadeOut(galleryDOM[i]);
-			}
+				function fadeOut(el){
+		
+					el.style.opacity = 1;
+	
+					(function fade() {
+						if ((el.style.opacity -= 0.2) < 0) {
+							el.style.opacity = 0;
+							el.style.display = 'none';
+						} else {
+							window.requestAnimationFrame(fade);
+						}
+					})();
+				}
+		
+				// call fadeOut function
+				if (typeof galleryDOM[i] !== "undefined") {
+					fadeOut(galleryDOM[i]);
+				}
 				galleryDOM[i].classList.remove("live");
 				galleryDOM[i].classList.remove("zero-right");
-
-		} else {
-			// Call buildDynamicGallery
-			buildDynamicGallery(i);
-
-			// Fade in filtered-in thumbs
-			function fadeIn(el, display) {
-				el.style.opacity = 0;
-				el.style.display = "inline-block";
-
-				// Add one to liveCount
-				liveCount++;
-				totalLiveCount++;
-				liveMarker = totalLiveCount;
-				// Add classes to deal with unhidden divs
-
-				el.classList.add("live");
-				// Tempting. But, need to reset zero-right before query
-				el.classList.remove("zero-right");
-
-				// For every 4th live div margin-right should be zero
-				if( liveCount === 4 ) {
-					el.classList.add("zero-right");
-
-					// reset liveCount
-					liveCount = 0;
-				}
-
-				(function fade() {
-					var val = parseFloat(el.style.opacity);
-					if( !((val += 0.1) > 1) ) {
-						el.style.opacity = val;
-						requestAnimationFrame(fade);
+		}
+	
+	// For...loop to fade in .col divs. Also, to add 
+	//    classes that modify margin space
+	
+		for ( i = 0; i < galleryDOM.length; i++ ) {
+			for(var j = 0; j< filteredGalleryIndex.length; j++ ) {
+				if ( parseInt(filteredGalleryIndex[j]) === i ) { 
+				
+					// Call buildDynamicGallery
+					buildDynamicGallery(i);
+		
+					// Fade in filtered-in thumbs
+					
+		
+					// Add one to liveCount
+					liveCount++;
+					// Add classes to deal with unhidden divs
+	
+					galleryDOM[i].classList.add("live");
+					// Tempting. But, need to reset zero-right before query
+					galleryDOM[i].classList.remove("zero-right");
+	
+					// For every 4th live div margin-right should be zero
+					if( liveCount === 4 ) {
+						galleryDOM[i].classList.add("zero-right");
+	
+						// reset liveCount
+						liveCount = 0;
 					}
-				})();
+				}
+			}
+
+			function fadeIn(el) {
+				timerf = setTimeout(function(){
+					if ( el.classList.contains("live") ) {
+						el.style.opacity = 0;
+						el.style.display = "inline-block";
+						(function fade() {
+							var val = parseFloat(el.style.opacity);
+							if( !((val += 0.3) > 1) ) {
+								el.style.opacity = val;
+								requestAnimationFrame(fade);
+							}
+						})();
+					}
+					loading.innerHTML = "";
+				}, 1000);	
 			}
 
 			// Call fade-in function
-			if ( typeof galleryDOM[i] !== "undefined" ) {
-				fadeIn(galleryDOM[i]);
-			}
+			fadeIn(galleryDOM[i]);
+
 		}
-	}
-			
+						
 	// For the last live div, margin should be zero, if 
 	//   if no live div is available print a message
-	if ( typeof galleryDOM[liveMarker-1] !== "undefined") {
-		galleryDOM[liveMarker-1].classList.add("zero-right");
+	if ( dynamicGallery.length -1 > 0 ) {
 		// Delete "No Results Message"
 		response.style.display = "none";
 		response.innerHTML = "";
@@ -411,7 +440,7 @@ var filterGallery = function(e) {
 		response.innerHTML = "No Results for " + searchBoxValueMessage;
 		
 	}
-
+	
 };// ~end Filter Gallery
 
 // FUNCTION: Advance Image or Video
