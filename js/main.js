@@ -358,7 +358,7 @@ var filterGallery = function(e) {
 					el.style.opacity = 1;
 	
 					(function fade() {
-						if ((el.style.opacity -= 0.2) < 0) {
+						if ((el.style.opacity -= 0.4) < 0) {
 							el.style.opacity = 0;
 							el.style.display = 'none';
 						} else {
@@ -413,7 +413,7 @@ var filterGallery = function(e) {
 						el.style.display = "inline-block";
 						(function fade() {
 							var val = parseFloat(el.style.opacity);
-							if( !((val += 0.3) > 1) ) {
+							if( !((val += 0.5) > 1) ) {
 								el.style.opacity = val;
 								requestAnimationFrame(fade);
 							}
