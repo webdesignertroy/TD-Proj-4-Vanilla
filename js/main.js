@@ -228,7 +228,7 @@ var createLightBox = function(info) {
 	leftArrow.style.display = "block";
 
 	// Display overlay with Fade-in
-	fadeThisIn(overlay)
+	fadeThisIn(overlay);
 
 }; // ~end create Lightbox
 
@@ -307,7 +307,7 @@ var filterGallery = function(e) {
 	if ( searchBox.value.trim() === "") { 
 		loadMessage = "Reload..";
 	 } else {
-	 	loadMessage = "Searching..."
+	 	loadMessage = "Searching...";
 	 }
 
 
@@ -620,7 +620,7 @@ function fadeThisIn(el) {
 		}
 	})();
 
-};// ~end Fade-in a div
+}// ~end Fade-in a div
 
 // FUNCTION: Fade-out a div
 function fadeThisOut(el) {
